@@ -84,19 +84,37 @@ const updateController = (id) => {
 };
 
 const newController = () => {
-    // ..... introducir código
+    let quizzes = JSON.parse(localStorage.quizzes);
+    let id = quizzes.length ;
+    let question = "";
+    let answer = "";
+    $('#main').html(quizForm('Create Quiz', 'create', id, question, answer));
 };
 
 const createController = () => {
-    // ..... introducir código
+    let quizzes = JSON.parse(localStorage.quizzes);
+    let id = quizzes.length;
+    let my_question = $('#question').val();
+    let my_answer = $('#answer').val();
+    quizzes[id] = { question: `${my_question}`,    answer: `${my_answer}` };
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 const deleteController = (id) => {
-    // ..... introducir código
+    let quizzes = JSON.parse(localStorage.quizzes);
+    let confirmacion = confirm("¿Está seguro que desea eliminar este quiz?");
+    if (confirmacion === true) {
+        quizzes.splice(id,1);
+    }
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
-const resetController = (id) => {
-    // ..... introducir código
+const resetController = () => {
+    localStorage.quizzes = initial_quizzes;
+    indexController();
+    localStorage.quizzes = JSON.stringify(quizzes);
 };
 
 
@@ -108,8 +126,10 @@ const eventsController = ()=> {
   $(document).on('click','.check',  (e)=> checkController(Number($(e.target).attr("quizid"))));
   $(document).on('click','.edit',   (e)=> editController(Number($(e.target).attr("quizid"))));
   $(document).on('click','.update', (e)=> updateController(Number($(e.target).attr("quizid"))));
-
-    // ..... añadir manejadores de eventos new, create, delete y reset
+  $(document).on('click','.delete', (e)=> deleteController(Number($(e.target).attr("quizid"))));
+  $(document).on('click','.reset',  (e)=> resetController(Number($(e.target).attr("quizid"))));
+  $(document).on('click','.new',    (e)=> newController(Number($(e.target).attr("quizid"))));
+  $(document).on('click','.create', (e)=> createController(Number($(e.target).attr("quizid"))));
 }
 
 
@@ -121,6 +141,6 @@ $(function(){
 </head>
 <body>
     <h1>MVC: Quizzes</h1>
-    <div id="main"><div>
+    <div id="main"></div>
 </body>
 </html>
